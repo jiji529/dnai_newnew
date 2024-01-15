@@ -386,12 +386,124 @@ var dnai_today = {
 			this.ajax_word_score();
 			this.on_button_func();
 			
+			// 국방부 날짜 선택 관련 추가 함수
+			this.setting_cal_date();
+			this.initCalDate();
+			
 			this.current_dateTime = new Date();
 			
 			if(edit_valid == false) {
 				$("#editing_action").hide();
 			}
 		},
+		setting_cal_date : function() {
+			$("#cal_date").datepicker({
+				//showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
+				  showOn: "focus",
+				  //buttonImage: "/application/db/jquery/images/calendar.gif", // 버튼 이미지
+
+				  //buttonImageOnly: true, // 버튼에 있는 이미지만 표시한다.
+
+				  changeMonth: true, // 월을 바꿀수 있는 셀렉트 박스를 표시한다.
+
+				  changeYear: true, // 년을 바꿀 수 있는 셀렉트 박스를 표시한다.
+
+				  minDate: new Date('2020-01-01'), // 2020-01-01부터 가능하도록 처리한다.
+				  
+				  maxDate: new Date(common_func.setting_today()), // 오늘 이후 날짜는 데이터가 없음으로 비활성화 처리한다.
+
+				  nextText: 'Later', // next 아이콘의 툴팁.
+
+				  prevText: 'prev', // prev 아이콘의 툴팁.
+
+				  numberOfMonths: [1,1], // 한번에 얼마나 많은 월을 표시할것인가. [2,3] 일 경우, 2(행) x 3(열) = 6개의 월을 표시한다.
+
+				  stepMonths: 1, // next, prev 버튼을 클릭했을때 얼마나 많은 월을 이동하여 표시하는가. 
+
+				  yearRange: 'c-100:c+10', // 년도 선택 셀렉트박스를 현재 년도에서 이전, 이후로 얼마의 범위를 표시할것인가.
+
+				  showButtonPanel: true, // 캘린더 하단에 버튼 패널을 표시한다. 
+
+				  //currentText: '오늘 날짜' , // 오늘 날짜로 이동하는 버튼 패널
+
+				  closeText: 'close',  // 닫기 버튼 패널
+
+				  dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
+
+				  showAnim: "slideDown", //애니메이션을 적용한다.
+
+				  showMonthAfterYear: true , // 월, 년순의 셀렉트 박스를 년,월 순으로 바꿔준다. 
+
+				  dayNamesMin: [ '일', '월', '화', '수', '목', '금', '토'], // 요일의 한글 형식.
+
+				  monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] // 월의 한글 형식.
+			});
+			
+			let cal_date = common_func.setting_today();
+			document.getElementById('cal_date').value = cal_date;
+			
+			$("#cal_prev").click(function() {
+				let today = new Date(cal_date);
+				let currentDate = new Date($("#cal_date").val());
+				currentDate.setDate(currentDate.getDate() - 1); // 현재 날짜에 1일을 더함
+				$("#cal_date").datepicker("setDate", currentDate); // DatePicker의 날짜를 업데이트
+				$("#cal_date").trigger("change");
+				
+				if(currentDate < today) {
+					$('.cal_next').removeClass('disabled');
+				}
+			});			
+			
+			$("#cal_next").click(function() {
+				let today = new Date(cal_date);
+				let currentDate = new Date($("#cal_date").val());
+				
+				if(currentDate < today) {
+					currentDate.setDate(currentDate.getDate() + 1); // 현재 날짜에 1일을 더함
+					$("#cal_date").datepicker("setDate", currentDate); // DatePicker의 날짜를 업데이트
+					$("#cal_date").trigger("change");
+					if(currentDate >= today) {
+						$('.cal_next').addClass('disabled');
+					}
+				}
+			});
+		},
+		initCalDate() {
+			$('#cal_date').change(function() {
+				/**
+				 * 여기서 이제 ajax로 파라미터 값을 세팅해서 서버로 던져줄것
+				 * 리턴 값이 오는 경우, successs 시 값을 바꿔주면서 날짜를 바꿔줄 예정
+				 * */ 				
+				$.ajax({
+					type : 'POST',
+			        url : './utils/total_word_score/word_score_by_day.jsp',
+			        data : {
+			        	sel_date : $('#cal_date').val()
+			        },
+			        dataType : 'json',
+			        async: true,
+			        success : function(data) {
+			        	data = new_obj(data);
+			        	dnai_today.today_word_score = data['today_word_score'];
+			        	dnai_today.today_word_score_pair = data['today_word_score_pair'];
+			        	dnai_today.today_1_word_score = data['today_1_word_score'];
+			        	dnai_today.today_1_word_score_pair = data['today_1_word_score_pair'];
+			        },
+			        beforeSend : function() {
+			        	$("#loadingBar_wordcloud_total").show();
+			        	$("#wordcloud svg").hide();
+			        	
+			        	$("#loadingBar_wordtable_total").show();
+			        	$("#total_word_table_ul").hide(); //
+			        },
+			        error : function(e) {
+			        	alert(e.responseText);
+			        }
+				}).done(function(){
+					dnai_today.draw_function();
+				});				
+			})
+		},		
 		search_keyword : function(obj) { // 검색 버튼 누를 경우 활성화
 			let paper_1 = $(".sub_tab-link.current").text();
 			let online_media_list_parameter = new_obj(dnai_today.online_media_list);

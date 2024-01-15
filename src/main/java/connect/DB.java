@@ -229,6 +229,99 @@ public class DB {
 		return result;
 	}
 	
+	//범용 사전의 단어 점수중 현재 시점 기준 top100을 리턴하는 함수
+	//파라미터로 단어/단어쌍 여부, 전체/1면 여부를 받아 리턴
+	public JSONArray total_word_score_by_day(String pair_type, String front_type, String sel_date) {
+		JSONArray result = new JSONArray();
+		
+		String start_date = sel_date;
+		String end_date = sel_date;
+		
+		//디비 연결 준비
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try {
+
+			Class.forName("com.mysql.jdbc.Driver");
+			con = DriverManager.getConnection(this.dictionary_url, this.dictionary_id, this.dictionary_password);
+			//total_word_dictionary에서 점수가 가장 높은 단어 100개를 리턴 //DATE_FORMAT(date, '%Y-%m-%d') = CURDATE()
+			sql = "SELECT word, score, pair_type FROM common_daily_score WHERE pair_type = ? AND type = ? AND date BETWEEN ? AND ? ORDER BY score DESC LIMIT 150;"; //test - INTERVAL 1 DAY
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, pair_type);
+			pstmt.setString(2, front_type);
+			pstmt.setString(3, start_date);
+			pstmt.setString(4, end_date);
+			rs = pstmt.executeQuery();
+			int limit_word_num = 1;
+			
+			while(rs.next()) {
+				String word = rs.getString("word");
+				if(this.isNumeric(word))
+					continue;
+				if(pair_type.equals("1")) {
+					String token1 = word.split(" ")[0];
+					String token2 = word.split(" ")[1];
+					if(this.isNumeric(token1) && this.isNumeric(token2))
+						continue;
+				}
+				JSONArray temp = new JSONArray();
+				temp.add(word);
+				temp.add(rs.getDouble("score"));
+				temp.add(rs.getString("pair_type"));
+				result.add(temp);
+				if(limit_word_num == 100)
+					break;
+				limit_word_num+=1;
+				
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException sqlexception) {
+			try {
+				con.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch(Exception e){
+			try {
+				con.close();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}finally {
+			try {
+				con.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	//범용 사전의 단어 점수중 현재 시점 기준 top100을 리턴하는 함수 -> 2022-04-28 추가
+	//파라미터로 단어/단어쌍 여부, 전체/1면 여부를 전부? 리턴
+	public JSONObject total_word_score_by_day(String sel_date) {
+//		String pair_type = "0"; //"1"=pair
+//		String front_type = "1"; //"1"=!1면 / "2"=1면
+		
+		JSONObject result = new JSONObject();
+		result.put("today_word_score", this.total_word_score_by_day("0", "1",sel_date));
+		result.put("today_word_score_pair", this.total_word_score_by_day("1", "1",sel_date));
+		
+		result.put("today_1_word_score", this.total_word_score_by_day("0", "2",sel_date));
+		result.put("today_1_word_score_pair", this.total_word_score_by_day("1", "2",sel_date));
+		
+		return result;
+	}	
+	
 	//업체별 단어 점수가 제일 높은 단어 100개를 리턴하는 함수
 	//업체 키값과 단어/단어쌍 여부를 파라미터로 입력 받아 리턴
 	public JSONArray member_word_score(String user_seq, String pair_type) {
