@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="org.json.simple.JSONArray"%>
-<%@page import="connect.DB"%>   
+<%@page import="connect.DB"%>
     
 <%
 DB db = new DB();
@@ -75,22 +75,20 @@ if(editValid != null && !editValid.equals("")) {
 		 	<div class = "score_display" id = "total_score_display">
 		 		<div class="inner">
 
-					<!-- 2024-01-15 HA.J.S 국방부용 달력 추가 -->
-					<!-- DatePicker 활용할 예정 -->
-					<!-- JSTL로 조건문 분기시켜야함(그게 아니라면 자바스크립트로라도 조건 줘야함) -->
-                    <div class="cal">
-                        <div class="cal_wrap">
-                            <div class="cal_area">
-                                <button type="button" class="cal_btn" id="cal_prev">
-                                	<span class="blind">이전날</span>
-                                </button>
-                                <input type="button" class="cal_date" id="cal_date" value="">
-                                <button type="button" class="cal_btn cal_next disabled" id="cal_next">
-                                	<span class="blind">다음날</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+						<!-- 2024-01-15 HA.J.S 국방부용 달력 추가 -->
+	                    <div class="cal" style="display: none;">
+	                        <div class="cal_wrap">
+	                            <div class="cal_area">
+	                                <button type="button" class="cal_btn" id="cal_prev">
+	                                	<span class="blind">이전날</span>
+	                                </button>
+	                                <input type="button" class="cal_date" id="cal_date" value="" style="cursor:pointer;">
+	                                <button type="button" class="cal_btn cal_next disabled" id="cal_next">
+	                                	<span class="blind">다음날</span>
+	                                </button>
+	                            </div>
+	                        </div>
+	                    </div>
                                         		 		
 		 				<div class="sub_tab-content current menu1" id = "today_total">
 							<!--  <h4 class = "total_info">ⓘ 신문 315종과 인터넷 뉴스 227종을 분석했습니다.</h4> -->

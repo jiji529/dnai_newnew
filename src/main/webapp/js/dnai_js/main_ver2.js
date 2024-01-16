@@ -397,6 +397,7 @@ var dnai_today = {
 			}
 		},
 		setting_cal_date : function() {
+			// 달력 세팅
 			$("#cal_date").datepicker({
 				//showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
 				  showOn: "focus",
@@ -442,6 +443,7 @@ var dnai_today = {
 			let cal_date = common_func.setting_today();
 			document.getElementById('cal_date').value = cal_date;
 			
+			// 이전 날짜 선택버튼 세팅			
 			$("#cal_prev").click(function() {
 				let today = new Date(cal_date);
 				let currentDate = new Date($("#cal_date").val());
@@ -454,6 +456,7 @@ var dnai_today = {
 				}
 			});			
 			
+			// 다음 날짜 선택버튼 세팅
 			$("#cal_next").click(function() {
 				let today = new Date(cal_date);
 				let currentDate = new Date($("#cal_date").val());
@@ -467,13 +470,14 @@ var dnai_today = {
 					}
 				}
 			});
+			
+			// 국방부 계정에 한정해서 열어주도록 처리함
+			if(user_name=='mnd1' || user_name=='mnd2') {
+				$('.cal').css('display','block');
+			}
 		},
 		initCalDate() {
-			$('#cal_date').change(function() {
-				/**
-				 * 여기서 이제 ajax로 파라미터 값을 세팅해서 서버로 던져줄것
-				 * 리턴 값이 오는 경우, successs 시 값을 바꿔주면서 날짜를 바꿔줄 예정
-				 * */ 				
+			$('#cal_date').change(function() { 				
 				$.ajax({
 					type : 'POST',
 			        url : './utils/total_word_score/word_score_by_day.jsp',
@@ -494,13 +498,28 @@ var dnai_today = {
 			        	$("#wordcloud svg").hide();
 			        	
 			        	$("#loadingBar_wordtable_total").show();
-			        	$("#total_word_table_ul").hide(); //
+			        	$("#total_word_table_ul").hide(); 
+			        	
+			        	// 진행중에 날짜 바뀜을 막기 위한 처리			        	
+			        	$('#cal_prev').attr('disabled',true);
+			        	$('#cal_date').attr('disabled',true);
+			        	$('#cal_next').attr('disabled',true);			        	
 			        },
 			        error : function(e) {
 			        	alert(e.responseText);
+			        	
+			        	// 에러발생시에도, 날짜선택 비활성을 풀어준다.
+						$('#cal_prev').removeAttr('disabled',true);
+			        	$('#cal_date').removeAttr('disabled',true);		        	
+						$('.cal_next').removeAttr('disabled',true);
 			        }
 				}).done(function(){
 					dnai_today.draw_function();
+					
+					// 전부 랜더링 된 이후라면, 날짜선택 비활성을 풀어준다.
+					$('#cal_prev').removeAttr('disabled',true);
+		        	$('#cal_date').removeAttr('disabled',true);		        	
+					$('.cal_next').removeAttr('disabled',true);
 				});				
 			})
 		},		
