@@ -18,6 +18,62 @@ Date.prototype.addDays = function(days) {
     return date;
 }
 
+function downloadURI_FORNEW(img_raw_uri, name, img_width, img_height){
+	let link = document.createElement("a");
+	let dates = new Date();
+	let year = new String(dates.getFullYear()); // 년도
+	let month = new String(dates.getMonth() + 1);  // 월
+	if(month.length < 2)
+		month = "0"+month;
+	
+	let day = new String(dates.getDate());  // 날짜
+	if(day.length < 2)
+		day = "0"+day;
+	
+	let hours = new String(dates.getHours()); // 시
+	if(hours.length < 2)
+		hours = "0"+hours;
+	
+	let minutes = new String(dates.getMinutes());  // 분
+	if(minutes.length < 2)
+		minutes = "0"+minutes;
+	
+	let seconds = new String(dates.getSeconds());  // 초
+	if(seconds.length < 2)
+		seconds = "0"+seconds;
+	
+	// let date = year+month+day+"_"+hours+minutes+seconds;
+	let date = document.getElementById('cal_date').value.replace(/-/gi, "")+"_"+hours+minutes+seconds;	
+	file_name_date = year+month+day;
+	
+	let filename = user_name+"_"+date;
+	
+	if(name.includes("positive")){
+		filename = user_name+"_positive_"+date;
+	}
+	
+	if(name.includes("negative")){
+		filename = user_name+"_negative_"+date;
+	}
+	
+	$.ajax({
+		type : "POST",
+		url : './utils/wordcloud_img_save.jsp',
+		data : {
+			"imgBase64" : img_raw_uri,
+			"filename" : filename,
+		}
+	}).done(function(o){
+		$('#download_link').attr({
+			'download': filename+'.png', //'wordcloud_'
+			'href':'./wordcloud_image/'+filename
+			})
+		document.getElementById("download_link").click();
+	})
+	
+	$("#wordcloud_date_text").remove();
+}
+
 function downloadURI(img_raw_uri, name, img_width, img_height){
 	let link = document.createElement("a");
 	let dates = new Date();
@@ -42,7 +98,7 @@ function downloadURI(img_raw_uri, name, img_width, img_height){
 	if(seconds.length < 2)
 		seconds = "0"+seconds;
 	
-	let date = year+month+day+"_"+hours+minutes+seconds;
+	let date = year+month+day+"_"+hours+minutes+seconds;	
 	file_name_date = year+month+day;
 	
 	let filename = user_name+"_"+date;
@@ -534,7 +590,7 @@ var dnai_today = {
 			}
 			let parent = $(obj).parent();
 			let keyword = parent.children('span').text();
-			let cal_date = document.getElementById('cal_date').value.replace(/-/gi, "");;
+			let cal_date = document.getElementById('cal_date').value.replace(/-/gi, "");
 			
 			window.open("sm5search:"+keyword+"|"+online_media_list_parameter+"|"+flag+"|"+cal_date, "keword_search","width = 400, height=300, left=100, top=50");
 		},
@@ -1200,7 +1256,9 @@ var dnai_today = {
 			let year = date.getFullYear(); 
 			let month = new String(date.getMonth()+1); 
 			let day = new String(date.getDate());
-			let day_name = week[date.getDay()];
+			/* let day_name = week[date.getDay()]; */
+			var cal_date_num = parseInt(new Date(document.getElementById('cal_date').value).getDay());
+			let day_name = week[cal_date_num];
 			let Hour = new String(date.getHours());
 			let minute = new String(date.getMinutes());
 			// 한자리수일 경우 0을 채워준다. 
@@ -1218,7 +1276,8 @@ var dnai_today = {
 			}
 			
 			//console.log(year+'-'+month+'-'+day+" "+Hour+":"+minute);
-			return year+'-'+month+'-'+day+"("+day_name+")"+" "+Hour+":"+minute;
+			// return year+'-'+month+'-'+day+"("+day_name+")"+" "+Hour+":"+minute;
+			return document.getElementById('cal_date').value+"("+day_name+")"+" "+Hour+":"+minute;			
 		},
 		img_download : function() {
 			let IDname = "wordcloud";
@@ -1296,7 +1355,7 @@ var dnai_today = {
 			}
 			html2canvas(wordcloud, {width : img_width, height: img_height, scrollY: -window.scrollY, scale : 1.5, useCORS : true}).then(function (canvas) {
 		        var img = canvas.toDataURL('image/png');
-		        downloadURI(img, "wordcloud.png", img_width, img_height);
+		        downloadURI_FORNEW(img, "wordcloud.png", img_width, img_height);
 		    });
 		},
 		excel_download : function() {
@@ -1338,7 +1397,8 @@ var dnai_today = {
 			if(seconds.length < 2)
 				seconds = "0"+seconds;
 			
-			let date = year+month+day+"_"+hours+minutes+seconds;
+			// let date = year+month+day+"_"+hours+minutes+seconds;
+			let date = document.getElementById('cal_date').value.replace(/-/gi, "")+"_"+hours+minutes+seconds;			
 			//file_name_date = year+month+day;
 			file_name_date = date;
 			
@@ -1356,7 +1416,8 @@ var dnai_today = {
 					"start_date" : start_date,
 					"end_date" : end_date,
 					"filename" : filename,
-					"removeChecked" : removeChecked
+					"removeChecked" : removeChecked,
+					"cal_date" : document.getElementById('cal_date').value
 				}
 			}).done(function(o){
 				$('#download_link').attr({
