@@ -76,7 +76,7 @@ if(editValid != null && !editValid.equals("")) {
 		 		<div class="inner">
 
 						<!-- 2024-01-15 HA.J.S 국방부용 달력 추가 -->
-	                    <div class="cal" style="display: none;">
+	                    <div class="cal">
 	                        <div class="cal_wrap">
 	                            <div class="cal_area">
 	                                <button type="button" class="cal_btn" id="cal_prev">

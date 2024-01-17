@@ -471,10 +471,11 @@ var dnai_today = {
 				}
 			});
 			
-			// 국방부 계정에 한정해서 열어주도록 처리함
-			if(user_name=='mnd1' || user_name=='mnd2') {
+			// 국방부 계정에 한정해서 열어주도록 처리함 
+			// 전체 다 열도록 처리하면서 주석처리함
+			/* if(user_name=='mnd1' || user_name=='mnd2') {
 				$('.cal').css('display','block');
-			}
+			} */
 		},
 		initCalDate() {
 			$('#cal_date').change(function() { 				
@@ -533,8 +534,9 @@ var dnai_today = {
 			}
 			let parent = $(obj).parent();
 			let keyword = parent.children('span').text();
+			let cal_date = document.getElementById('cal_date').value.replace(/-/gi, "");;
 			
-			window.open("sm5search:"+keyword+"|"+online_media_list_parameter+"|"+flag, "keword_search","width = 400, height=300, left=100, top=50");
+			window.open("sm5search:"+keyword+"|"+online_media_list_parameter+"|"+flag+"|"+cal_date, "keword_search","width = 400, height=300, left=100, top=50");
 		},
 		ajax_word_score : function() {
 			$.ajax({
