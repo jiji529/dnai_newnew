@@ -409,7 +409,7 @@ var dnai_today = {
 
 				  changeYear: true, // 년을 바꿀 수 있는 셀렉트 박스를 표시한다.
 
-				  minDate: new Date('2020-01-01'), // 2020-01-01부터 가능하도록 처리한다.
+				  minDate: new Date('2020-06-01'), // 유의미한 데이터가 2020-06-01부터 존재하므로, 2020-06-01부터 가능하도록 처리한다.
 				  
 				  maxDate: new Date(common_func.setting_today()), // 오늘 이후 날짜는 데이터가 없음으로 비활성화 처리한다.
 
