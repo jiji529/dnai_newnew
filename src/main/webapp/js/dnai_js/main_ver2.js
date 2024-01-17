@@ -724,6 +724,13 @@ var dnai_today = {
 				if(input_data.length == 0) {
 					dnai_today.sunday();
 				}else{
+					$(".total_info").html('<li class="media_count_info"></li><li>10분마다 갱신됩니다.</li>');
+					$(".total_info").css("display","block");
+					
+					$("#pair_type").css("display","block");
+					$("#wordcloud").css("display","block");
+					$("#word-table").css("display","block");
+					
 					let media_count_info = "신문 "+this.paper_media_count+"종과 인터넷 뉴스 "+this.online_media_count+"종을 <strong>TF-IDF 알고리즘</strong>을 활용하여 분석했습니다."+"<a>TF-IDF란?</a>"
 					$(".media_count_info").empty();
 					$(".media_count_info").html(media_count_info);
@@ -739,6 +746,13 @@ var dnai_today = {
 				if(input_data.length == 0) {
 					dnai_today.total_info_();
 				}else{
+					$(".total_info").html('<li class="media_count_info"></li><li>10분마다 갱신됩니다.</li>');
+					$(".total_info").css("display","block");
+					
+					$("#pair_type").css("display","block");
+					$("#wordcloud").css("display","block");
+					$("#word-table").css("display","block");
+					
 					let media_count_info = "신문 "+this.paper_media_count+"종과 인터넷 뉴스 "+this.online_media_count+"종을 <strong>TF-IDF 알고리즘</strong>을 활용하여 분석했습니다."+"<a>TF-IDF란?</a>"
 					$(".media_count_info").empty();
 					$(".media_count_info").html(media_count_info);
