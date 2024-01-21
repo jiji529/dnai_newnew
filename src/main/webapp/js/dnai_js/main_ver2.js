@@ -1406,7 +1406,7 @@ var dnai_today = {
 			
 			$.ajax({
 				type : "POST",
-				url : './utils/wordcloud_excel_save.jsp',
+				url : './utils/wordcloud_excel_save_by_day.jsp',
 				data : {
 					"tab" : tab_name,
 					"pair_type" : pair_type,

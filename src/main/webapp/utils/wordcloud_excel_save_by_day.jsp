@@ -39,11 +39,12 @@ request.setCharacterEncoding("utf-8");
 String tab = request.getParameter("tab");
 String filename = request.getParameter("filename");
 String removeCheck = request.getParameter("removeChecked");
+String cal_date = request.getParameter("cal_date");
 //오늘의 주요 키워드
 if(tab.contains("오늘")){
 	String pair_type = request.getParameter("pair_type");
 	String front = request.getParameter("front");
-	JSONArray word_score = db.total_word_score(pair_type, front);
+	JSONArray word_score = db.total_word_score_by_day(pair_type, front, cal_date);
 	String file_path = folder_path+filename+".xls";
 	
 	String front_text = "";
