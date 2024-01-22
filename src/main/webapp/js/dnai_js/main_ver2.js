@@ -439,12 +439,12 @@ var dnai_today = {
 			this.online_media_list = common_func.online_media_list;
 			this.online_media_count = common_func.online_media_count;
 			this.paper_media_count = common_func.paper_media_count;
-			this.ajax_word_score();
-			this.on_button_func();
-			
-			// 국방부 날짜 선택 관련 추가 함수
+			// 국방부 날짜 선택 관련 추가 함수 (날짜가 먼저 세팅되야하므로 함수 실행순서를 변경)
 			this.setting_cal_date();
 			this.initCalDate();
+			// 일정시간이 지나면, 다시 페이지를 로딩하므로 선택했던 날짜대로 원복하기 위해서 word_score_by_day.jsp를 사용하도록 변경함
+			this.ajax_word_score();
+			this.on_button_func();			
 			
 			this.current_dateTime = new Date();
 			
@@ -597,8 +597,10 @@ var dnai_today = {
 		ajax_word_score : function() {
 			$.ajax({
 				type : 'POST',
-		        url : './utils/total_word_score/word_score.jsp',
-		        data : {},
+		        url : './utils/total_word_score/word_score_by_day.jsp',
+		        data : {
+					sel_date : $('#cal_date').val()
+				},
 		        dataType : 'json',
 		        async: true,
 		        success : function(data) {

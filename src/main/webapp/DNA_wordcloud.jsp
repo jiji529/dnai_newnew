@@ -310,6 +310,6 @@ var user_seq = <%=user_seq%>;
 var user_start_date = "<%=user_start_date%>";
 var edit_valid = <%=edit_valid%>;
 </script>
-<script type="text/javascript" src="./js/dnai_js/main_ver2.js?v=240122"></script> 
+<script type="text/javascript" src="./js/dnai_js/main_ver2.js?v=240122_2"></script> 
 </body>
 </html>
