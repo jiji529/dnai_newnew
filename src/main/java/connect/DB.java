@@ -406,6 +406,13 @@ public class DB {
 	//업체 키값, 단어/단어쌍 여부, 기간을 파라미터로 받아 리턴
 	//화제 단어를 검출하기 위해 해당 기간동안 높았던 단어중 누적 단어를 제외
 	public JSONArray member_word_score_period(String user_seq, String pair_type, String period, String removeChecked) {
+		// DATE_ADD(NOW(),INTERVAL - ? DAY ) 혹은 NOW()를 쓸 경우, '2024-01-01 00:00:00으로 기간이 다르기 때문에 값이 다르게 나옴'
+		// 따라서 날짜조건을 워드클라우드와 동일하게 맞춰주기 위한 작업을 추가함
+		LocalDate end_date = LocalDate.now();
+		String end_date_string = end_date.toString();
+		LocalDate start_date = end_date.minusDays(Integer.valueOf(period));
+		String start_date_string = start_date.toString();		
+		
 		JSONArray result = new JSONArray();
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -437,15 +444,18 @@ public class DB {
 					"FROM daily_score " + 
 					"LEFT JOIN word_dictionary " + 
 					"ON daily_score.word_dictionary_seq = word_dictionary.seq " + 
-					"WHERE date BETWEEN DATE_ADD(NOW(),INTERVAL - ? DAY ) AND NOW() " + 
+//					"WHERE date BETWEEN DATE_ADD(NOW(),INTERVAL - ? DAY ) AND NOW() " + 
+					"WHERE date BETWEEN ? AND ? " + 
 					"AND word_dictionary.user_list_seq = ? " + 
 					"AND word_dictionary.active = 'Y' AND word_dictionary.pair_type = ? " + 
 					"GROUP BY word_dictionary_seq ORDER BY total_score DESC LIMIT 300";
 			
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, period);
-			pstmt.setString(2, user_seq);
-			pstmt.setString(3, pair_type);
+			pstmt.setString(1, start_date_string);
+			pstmt.setString(2, end_date_string);
+//			pstmt.setString(1, period);
+			pstmt.setString(3, user_seq);
+			pstmt.setString(4, pair_type);
 			rs = pstmt.executeQuery();
 			
 			//넉넉하게 300개 들고와서 누적 단어를 제외하고, 100개를 리턴
