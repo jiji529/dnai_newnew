@@ -1279,7 +1279,15 @@ var dnai_today = {
 			
 			//console.log(year+'-'+month+'-'+day+" "+Hour+":"+minute);
 			// return year+'-'+month+'-'+day+"("+day_name+")"+" "+Hour+":"+minute;
-			return document.getElementById('cal_date').value+"("+day_name+")"+" "+Hour+":"+minute;			
+			var result_date = "";
+			var today_yyyyMMdd = year + "-" + month + "-" + day;
+			if(today_yyyyMMdd==document.getElementById('cal_date').value) {
+				result_date = document.getElementById('cal_date').value+"("+day_name+")"+" "+Hour+":"+minute;
+			} else {
+				result_date = document.getElementById('cal_date').value+"("+day_name+")";
+			}
+
+			return result_date;			
 		},
 		img_download : function() {
 			let IDname = "wordcloud";
