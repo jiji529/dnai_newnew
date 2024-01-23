@@ -18,6 +18,62 @@ Date.prototype.addDays = function(days) {
     return date;
 }
 
+function downloadURI_FORNEW(img_raw_uri, name, img_width, img_height){
+	let link = document.createElement("a");
+	let dates = new Date();
+	let year = new String(dates.getFullYear()); // 년도
+	let month = new String(dates.getMonth() + 1);  // 월
+	if(month.length < 2)
+		month = "0"+month;
+	
+	let day = new String(dates.getDate());  // 날짜
+	if(day.length < 2)
+		day = "0"+day;
+	
+	let hours = new String(dates.getHours()); // 시
+	if(hours.length < 2)
+		hours = "0"+hours;
+	
+	let minutes = new String(dates.getMinutes());  // 분
+	if(minutes.length < 2)
+		minutes = "0"+minutes;
+	
+	let seconds = new String(dates.getSeconds());  // 초
+	if(seconds.length < 2)
+		seconds = "0"+seconds;
+	
+	// let date = year+month+day+"_"+hours+minutes+seconds;
+	let date = document.getElementById('cal_date').value.replace(/-/gi, "")+"_"+hours+minutes+seconds;	
+	file_name_date = year+month+day;
+	
+	let filename = user_name+"_"+date;
+	
+	if(name.includes("positive")){
+		filename = user_name+"_positive_"+date;
+	}
+	
+	if(name.includes("negative")){
+		filename = user_name+"_negative_"+date;
+	}
+	
+	$.ajax({
+		type : "POST",
+		url : './utils/wordcloud_img_save.jsp',
+		data : {
+			"imgBase64" : img_raw_uri,
+			"filename" : filename,
+		}
+	}).done(function(o){
+		$('#download_link').attr({
+			'download': filename+'.png', //'wordcloud_'
+			'href':'./wordcloud_image/'+filename
+			})
+		document.getElementById("download_link").click();
+	})
+	
+	$("#wordcloud_date_text").remove();
+}
+
 function downloadURI(img_raw_uri, name, img_width, img_height){
 	let link = document.createElement("a");
 	let dates = new Date();
@@ -42,7 +98,7 @@ function downloadURI(img_raw_uri, name, img_width, img_height){
 	if(seconds.length < 2)
 		seconds = "0"+seconds;
 	
-	let date = year+month+day+"_"+hours+minutes+seconds;
+	let date = year+month+day+"_"+hours+minutes+seconds;	
 	file_name_date = year+month+day;
 	
 	let filename = user_name+"_"+date;
@@ -383,8 +439,12 @@ var dnai_today = {
 			this.online_media_list = common_func.online_media_list;
 			this.online_media_count = common_func.online_media_count;
 			this.paper_media_count = common_func.paper_media_count;
+			// 국방부 날짜 선택 관련 추가 함수 (날짜가 먼저 세팅되야하므로 함수 실행순서를 변경)
+			this.setting_cal_date();
+			this.initCalDate();
+			// 일정시간이 지나면, 다시 페이지를 로딩하므로 선택했던 날짜대로 원복하기 위해서 word_score_by_day.jsp를 사용하도록 변경함
 			this.ajax_word_score();
-			this.on_button_func();
+			this.on_button_func();			
 			
 			this.current_dateTime = new Date();
 			
@@ -392,6 +452,134 @@ var dnai_today = {
 				$("#editing_action").hide();
 			}
 		},
+		setting_cal_date : function() {
+			// 달력 세팅
+			$("#cal_date").datepicker({
+				//showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
+				  showOn: "focus",
+				  //buttonImage: "/application/db/jquery/images/calendar.gif", // 버튼 이미지
+
+				  //buttonImageOnly: true, // 버튼에 있는 이미지만 표시한다.
+
+				  changeMonth: true, // 월을 바꿀수 있는 셀렉트 박스를 표시한다.
+
+				  changeYear: true, // 년을 바꿀 수 있는 셀렉트 박스를 표시한다.
+
+				  minDate: new Date('2020-06-01'), // 유의미한 데이터가 2020-06-01부터 존재하므로, 2020-06-01부터 가능하도록 처리한다.
+				  
+				  maxDate: new Date(common_func.setting_today()), // 오늘 이후 날짜는 데이터가 없음으로 비활성화 처리한다.
+
+				  nextText: 'Later', // next 아이콘의 툴팁.
+
+				  prevText: 'prev', // prev 아이콘의 툴팁.
+
+				  numberOfMonths: [1,1], // 한번에 얼마나 많은 월을 표시할것인가. [2,3] 일 경우, 2(행) x 3(열) = 6개의 월을 표시한다.
+
+				  stepMonths: 1, // next, prev 버튼을 클릭했을때 얼마나 많은 월을 이동하여 표시하는가. 
+
+				  yearRange: 'c-100:c+10', // 년도 선택 셀렉트박스를 현재 년도에서 이전, 이후로 얼마의 범위를 표시할것인가.
+
+				  showButtonPanel: true, // 캘린더 하단에 버튼 패널을 표시한다. 
+
+				  currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
+
+				  closeText: '닫기',  // 닫기 버튼 패널
+
+				  dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
+
+				  showAnim: "slideDown", //애니메이션을 적용한다.
+
+				  showMonthAfterYear: true , // 월, 년순의 셀렉트 박스를 년,월 순으로 바꿔준다. 
+
+				  dayNamesMin: [ '일', '월', '화', '수', '목', '금', '토'], // 요일의 한글 형식.
+
+				  monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] // 월의 한글 형식.
+			});
+			
+			let cal_date = common_func.setting_today();
+			document.getElementById('cal_date').value = cal_date;
+			
+			// 이전 날짜 선택버튼 세팅			
+			$("#cal_prev").click(function() {
+				let today = new Date(cal_date);
+				let currentDate = new Date($("#cal_date").val());
+				currentDate.setDate(currentDate.getDate() - 1); // 현재 날짜에 1일을 더함
+				$("#cal_date").datepicker("setDate", currentDate); // DatePicker의 날짜를 업데이트
+				$("#cal_date").trigger("change");
+				
+				if(currentDate < today) {
+					$('.cal_next').removeClass('disabled');
+				}
+			});			
+			
+			// 다음 날짜 선택버튼 세팅
+			$("#cal_next").click(function() {
+				let today = new Date(cal_date);
+				let currentDate = new Date($("#cal_date").val());
+				
+				if(currentDate < today) {
+					currentDate.setDate(currentDate.getDate() + 1); // 현재 날짜에 1일을 더함
+					$("#cal_date").datepicker("setDate", currentDate); // DatePicker의 날짜를 업데이트
+					$("#cal_date").trigger("change");
+					if(currentDate >= today) {
+						$('.cal_next').addClass('disabled');
+					}
+				}
+			});
+			
+			// 국방부 계정에 한정해서 열어주도록 처리함 
+			// 전체 다 열도록 처리하면서 주석처리함
+			/* if(user_name=='mnd1' || user_name=='mnd2') {
+				$('.cal').css('display','block');
+			} */
+		},
+		initCalDate() {
+			$('#cal_date').change(function() { 				
+				$.ajax({
+					type : 'POST',
+			        url : './utils/total_word_score/word_score_by_day.jsp',
+			        data : {
+			        	sel_date : $('#cal_date').val()
+			        },
+			        dataType : 'json',
+			        async: true,
+			        success : function(data) {
+			        	data = new_obj(data);
+			        	dnai_today.today_word_score = data['today_word_score'];
+			        	dnai_today.today_word_score_pair = data['today_word_score_pair'];
+			        	dnai_today.today_1_word_score = data['today_1_word_score'];
+			        	dnai_today.today_1_word_score_pair = data['today_1_word_score_pair'];
+			        },
+			        beforeSend : function() {
+			        	$("#loadingBar_wordcloud_total").show();
+			        	$("#wordcloud svg").hide();
+			        	
+			        	$("#loadingBar_wordtable_total").show();
+			        	$("#total_word_table_ul").hide(); 
+			        	
+			        	// 진행중에 날짜 바뀜을 막기 위한 처리			        	
+			        	$('#cal_prev').attr('disabled',true);
+			        	$('#cal_date').attr('disabled',true);
+			        	$('#cal_next').attr('disabled',true);			        	
+			        },
+			        error : function(e) {
+			        	alert(e.responseText);
+			        	
+			        	// 에러발생시에도, 날짜선택 비활성을 풀어준다.
+						$('#cal_prev').removeAttr('disabled',true);
+			        	$('#cal_date').removeAttr('disabled',true);		        	
+						$('.cal_next').removeAttr('disabled',true);
+			        }
+				}).done(function(){
+					dnai_today.draw_function();
+					
+					// 전부 랜더링 된 이후라면, 날짜선택 비활성을 풀어준다.
+					$('#cal_prev').removeAttr('disabled',true);
+		        	$('#cal_date').removeAttr('disabled',true);		        	
+					$('.cal_next').removeAttr('disabled',true);
+				});				
+			})
+		},		
 		search_keyword : function(obj) { // 검색 버튼 누를 경우 활성화
 			let paper_1 = $(".sub_tab-link.current").text();
 			let online_media_list_parameter = new_obj(dnai_today.online_media_list);
@@ -402,14 +590,17 @@ var dnai_today = {
 			}
 			let parent = $(obj).parent();
 			let keyword = parent.children('span').text();
+			let cal_date = document.getElementById('cal_date').value.replace(/-/gi, "");
 			
-			window.open("sm5search:"+keyword+"|"+online_media_list_parameter+"|"+flag, "keword_search","width = 400, height=300, left=100, top=50");
+			window.open("sm5search:"+keyword+"|"+online_media_list_parameter+"|"+flag+"|"+cal_date, "keword_search","width = 400, height=300, left=100, top=50");
 		},
 		ajax_word_score : function() {
 			$.ajax({
 				type : 'POST',
-		        url : './utils/total_word_score/word_score.jsp',
-		        data : {},
+		        url : './utils/total_word_score/word_score_by_day.jsp',
+		        data : {
+					sel_date : $('#cal_date').val()
+				},
 		        dataType : 'json',
 		        async: true,
 		        success : function(data) {
@@ -593,6 +784,13 @@ var dnai_today = {
 				if(input_data.length == 0) {
 					dnai_today.sunday();
 				}else{
+					$(".total_info").html('<li class="media_count_info"></li><li>10분마다 갱신됩니다.</li>');
+					$(".total_info").css("display","block");
+					
+					$("#pair_type").css("display","block");
+					$("#wordcloud").css("display","block");
+					$("#word-table").css("display","block");
+					
 					let media_count_info = "신문 "+this.paper_media_count+"종과 인터넷 뉴스 "+this.online_media_count+"종을 <strong>TF-IDF 알고리즘</strong>을 활용하여 분석했습니다."+"<a>TF-IDF란?</a>"
 					$(".media_count_info").empty();
 					$(".media_count_info").html(media_count_info);
@@ -608,6 +806,13 @@ var dnai_today = {
 				if(input_data.length == 0) {
 					dnai_today.total_info_();
 				}else{
+					$(".total_info").html('<li class="media_count_info"></li><li>10분마다 갱신됩니다.</li>');
+					$(".total_info").css("display","block");
+					
+					$("#pair_type").css("display","block");
+					$("#wordcloud").css("display","block");
+					$("#word-table").css("display","block");
+					
 					let media_count_info = "신문 "+this.paper_media_count+"종과 인터넷 뉴스 "+this.online_media_count+"종을 <strong>TF-IDF 알고리즘</strong>을 활용하여 분석했습니다."+"<a>TF-IDF란?</a>"
 					$(".media_count_info").empty();
 					$(".media_count_info").html(media_count_info);
@@ -1053,7 +1258,9 @@ var dnai_today = {
 			let year = date.getFullYear(); 
 			let month = new String(date.getMonth()+1); 
 			let day = new String(date.getDate());
-			let day_name = week[date.getDay()];
+			/* let day_name = week[date.getDay()]; */
+			var cal_date_num = parseInt(new Date(document.getElementById('cal_date').value).getDay());
+			let day_name = week[cal_date_num];
 			let Hour = new String(date.getHours());
 			let minute = new String(date.getMinutes());
 			// 한자리수일 경우 0을 채워준다. 
@@ -1071,7 +1278,8 @@ var dnai_today = {
 			}
 			
 			//console.log(year+'-'+month+'-'+day+" "+Hour+":"+minute);
-			return year+'-'+month+'-'+day+"("+day_name+")"+" "+Hour+":"+minute;
+			// return year+'-'+month+'-'+day+"("+day_name+")"+" "+Hour+":"+minute;
+			return document.getElementById('cal_date').value+"("+day_name+")"+" "+Hour+":"+minute;			
 		},
 		img_download : function() {
 			let IDname = "wordcloud";
@@ -1149,7 +1357,7 @@ var dnai_today = {
 			}
 			html2canvas(wordcloud, {width : img_width, height: img_height, scrollY: -window.scrollY, scale : 1.5, useCORS : true}).then(function (canvas) {
 		        var img = canvas.toDataURL('image/png');
-		        downloadURI(img, "wordcloud.png", img_width, img_height);
+		        downloadURI_FORNEW(img, "wordcloud.png", img_width, img_height);
 		    });
 		},
 		excel_download : function() {
@@ -1191,7 +1399,8 @@ var dnai_today = {
 			if(seconds.length < 2)
 				seconds = "0"+seconds;
 			
-			let date = year+month+day+"_"+hours+minutes+seconds;
+			// let date = year+month+day+"_"+hours+minutes+seconds;
+			let date = document.getElementById('cal_date').value.replace(/-/gi, "")+"_"+hours+minutes+seconds;			
 			//file_name_date = year+month+day;
 			file_name_date = date;
 			
@@ -1199,7 +1408,7 @@ var dnai_today = {
 			
 			$.ajax({
 				type : "POST",
-				url : './utils/wordcloud_excel_save.jsp',
+				url : './utils/wordcloud_excel_save_by_day.jsp',
 				data : {
 					"tab" : tab_name,
 					"pair_type" : pair_type,
@@ -1209,7 +1418,8 @@ var dnai_today = {
 					"start_date" : start_date,
 					"end_date" : end_date,
 					"filename" : filename,
-					"removeChecked" : removeChecked
+					"removeChecked" : removeChecked,
+					"cal_date" : document.getElementById('cal_date').value
 				}
 			}).done(function(o){
 				$('#download_link').attr({
@@ -1288,9 +1498,9 @@ var dnai_member = {
 
 				  showButtonPanel: true, // 캘린더 하단에 버튼 패널을 표시한다. 
 
-				  //currentText: '오늘 날짜' , // 오늘 날짜로 이동하는 버튼 패널
+				  currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
 
-				  closeText: 'close',  // 닫기 버튼 패널
+				  closeText: '닫기',  // 닫기 버튼 패널
 
 				  dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 
@@ -1328,9 +1538,9 @@ var dnai_member = {
 
 		    	  showButtonPanel: true, // 캘린더 하단에 버튼 패널을 표시한다. 
 
-		    	  //currentText: '오늘 날짜' , // 오늘 날짜로 이동하는 버튼 패널
+		    	  currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
 
-		    	  closeText: 'close',  // 닫기 버튼 패널
+		    	  closeText: '닫기',  // 닫기 버튼 패널
 
 		    	  dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 

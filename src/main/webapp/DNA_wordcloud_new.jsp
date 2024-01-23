@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="org.json.simple.JSONArray"%>
-<%@page import="connect.DB"%>   
+<%@page import="connect.DB"%>
     
 <%
 DB db = new DB();
@@ -22,7 +22,7 @@ if(editValid != null && !editValid.equals("")) {
 <head>
 <meta charset="UTF-8">
 <title>DNA wordcloud</title>
-<link rel="stylesheet" href="./css/style_copy.css?v=240123">
+<link rel="stylesheet" href="./css/style_copy_new.css?v=240123">
 <link id="load-css-0" rel="stylesheet" type="text/css" href="./css/tooltip.css">
 <link id="load-css-1" rel="stylesheet" type="text/css" href="./css/util.css">
 <link id="load-css-2" rel="stylesheet" type="text/css" href="./css/table.css">
@@ -74,6 +74,22 @@ if(editValid != null && !editValid.equals("")) {
 			
 		 	<div class = "score_display" id = "total_score_display">
 		 		<div class="inner">
+
+						<!-- 2024-01-15 HA.J.S 국방부용 달력 추가 -->
+	                    <div class="cal">
+	                        <div class="cal_wrap">
+	                            <div class="cal_area">
+	                                <button type="button" class="cal_btn" id="cal_prev">
+	                                	<span class="blind">이전날</span>
+	                                </button>
+	                                <input type="button" class="cal_date" id="cal_date" value="" style="cursor:pointer;">
+	                                <button type="button" class="cal_btn cal_next disabled" id="cal_next">
+	                                	<span class="blind">다음날</span>
+	                                </button>
+	                            </div>
+	                        </div>
+	                    </div>
+                                        		 		
 		 				<div class="sub_tab-content current menu1" id = "today_total">
 							<!--  <h4 class = "total_info">ⓘ 신문 315종과 인터넷 뉴스 227종을 분석했습니다.</h4> -->
 							
@@ -294,6 +310,6 @@ var user_seq = <%=user_seq%>;
 var user_start_date = "<%=user_start_date%>";
 var edit_valid = <%=edit_valid%>;
 </script>
-<script type="text/javascript" src="./js/dnai_js/main_ver2.js?v=240123"></script> 
+<script type="text/javascript" src="./js/dnai_js/main_ver2_new.js?v=240123"></script> 
 </body>
 </html>

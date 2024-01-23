@@ -58,7 +58,7 @@ button,input,select,textarea{vertical-align:middle;font-size:100%}
 button{border:0;background-color:rgba(0,0,0,0);cursor:pointer}
 table{border-collapse:collapse;border-spacing:0}
 body{-webkit-text-size-adjust:none}
-
+.blind{visibility:hidden; position:absolute;top:-9999px;left:-9999px;width:1px;height:1px;margin:0; padding:0;background:none;font-size:0;	line-height:0;	text-indent:-9999px;}
 .check{margin-left: 20px; margin-top: 2px}
 .check input { width: 0; height:0; display:none; }
 .check label{font-size: 13px; line-height: 20px; float: left;cursor: pointer; }
@@ -210,7 +210,7 @@ input::-ms-clear{display:none}
 .progress{float: left; width: 100%;}
 
 .vt{height: 770px; }
-.view_btn{position: absolute; top: 95px; right: 380px;}
+.view_btn{position: absolute; top: 135px; right: 380px;}
 .view_btn button{ height: 30px; padding: 0 5px 0 30px; background-color: #fff; border: 1px #ccc solid; float: left; font-size: 13px;}
 .view_btn button.on{ border: 0; background-color: #09f; color: #fff; background-repeat: no-repeat;}
 .view_btn .view_w{border-radius: 6px 0 0 6px; background: url(./images/ico_w.png) 0 0 no-repeat;}
@@ -218,6 +218,15 @@ input::-ms-clear{display:none}
 .view_btn .view_w.on{background-image: url(./images/ico_w_on.png)}
 .view_btn .view_h.on{ background-image: url(./images/ico_h_on.png) }
 .vt .rank_li li{margin-bottom: 5px;}
+
+.cal{width: 100%; position: relative; margin-bottom: 10px;}
+.cal_wrap{}
+.cal_area{text-align: center;}
+.cal_area .cal_date{font-weight: 500; font-size: 20px; margin: 0 10px; padding-right: 30px; background: url(./images/btn_cal.png) right no-repeat;border: 0;}
+.cal_area .cal_btn{width: 24px; height: 24px; background: url(./images/btn_arrow.png) 0 0 no-repeat;}
+.cal_area .cal_btn.cal_next{transform: rotate(180deg); overflow: hidden;}
+.cal_area .disabled{opacity: 0.3; }
+.cal_layer{position: absolute;}
 
 /* 추가하실거면 이 밑으로 추가하시던가 css 파일 따로 만드셔서 추가해주세요. */
 
