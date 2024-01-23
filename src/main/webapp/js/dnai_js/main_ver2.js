@@ -481,9 +481,9 @@ var dnai_today = {
 
 				  showButtonPanel: true, // 캘린더 하단에 버튼 패널을 표시한다. 
 
-				  //currentText: '오늘 날짜' , // 오늘 날짜로 이동하는 버튼 패널
+				  currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
 
-				  closeText: 'close',  // 닫기 버튼 패널
+				  closeText: '닫기',  // 닫기 버튼 패널
 
 				  dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 
@@ -1498,9 +1498,9 @@ var dnai_member = {
 
 				  showButtonPanel: true, // 캘린더 하단에 버튼 패널을 표시한다. 
 
-				  //currentText: '오늘 날짜' , // 오늘 날짜로 이동하는 버튼 패널
+				  currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
 
-				  closeText: 'close',  // 닫기 버튼 패널
+				  closeText: '닫기',  // 닫기 버튼 패널
 
 				  dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 
@@ -1538,9 +1538,9 @@ var dnai_member = {
 
 		    	  showButtonPanel: true, // 캘린더 하단에 버튼 패널을 표시한다. 
 
-		    	  //currentText: '오늘 날짜' , // 오늘 날짜로 이동하는 버튼 패널
+		    	  currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
 
-		    	  closeText: 'close',  // 닫기 버튼 패널
+		    	  closeText: '닫기',  // 닫기 버튼 패널
 
 		    	  dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 

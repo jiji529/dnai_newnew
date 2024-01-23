@@ -22,7 +22,7 @@ if(editValid != null && !editValid.equals("")) {
 <head>
 <meta charset="UTF-8">
 <title>DNA wordcloud</title>
-<link rel="stylesheet" href="./css/style_copy.css">
+<link rel="stylesheet" href="./css/style_copy.css?v=240123">
 <link id="load-css-0" rel="stylesheet" type="text/css" href="./css/tooltip.css">
 <link id="load-css-1" rel="stylesheet" type="text/css" href="./css/util.css">
 <link id="load-css-2" rel="stylesheet" type="text/css" href="./css/table.css">
@@ -310,6 +310,6 @@ var user_seq = <%=user_seq%>;
 var user_start_date = "<%=user_start_date%>";
 var edit_valid = <%=edit_valid%>;
 </script>
-<script type="text/javascript" src="./js/dnai_js/main_ver2.js?v=240122_2"></script> 
+<script type="text/javascript" src="./js/dnai_js/main_ver2.js?v=240123"></script> 
 </body>
 </html>

@@ -224,7 +224,7 @@ input::-ms-clear{display:none}
 .cal_area{text-align: center;}
 .cal_area .cal_date{font-weight: 500; font-size: 20px; margin: 0 10px; padding-right: 30px; background: url(./images/btn_cal.png) right no-repeat;border: 0;}
 .cal_area .cal_btn{width: 24px; height: 24px; background: url(./images/btn_arrow.png) 0 0 no-repeat;}
-.cal_area .cal_btn.cal_next{transform: rotate(180deg); overflow: hidden;}
+.cal_area .cal_btn.cal_next{transform: rotate(180deg);}
 .cal_area .disabled{opacity: 0.3; }
 .cal_layer{position: absolute;}
 
