@@ -20,12 +20,12 @@ import text_processing.ArirangAnalyzerHandler;
 public class refine {
 	
 	//local
-	private String komoran_model_path = "C:\\Users\\tealight\\Desktop\\hoonzi\\model_path\\";
-	private String komoran_user_dictionary = komoran_model_path+"dic.user";
+//	private String komoran_model_path = "C:\\Users\\tealight\\Desktop\\hoonzi\\model_path\\";
+//	private String komoran_user_dictionary = komoran_model_path+"dic.user";
 	//server
 	// 형태소 분석기 서버 위치 (로컬 테스트 시 위 로컬 부분의 경로를 바꿔줘야함)
-//	public static String komoran_model_path = "/home/dnai/model_path";
-//	public static String komoran_user_dictionary = "/home/dnai/word2vec/dic.user";
+	public static String komoran_model_path = "/home/dnai/model_path";
+	public static String komoran_user_dictionary = "/home/dnai/word2vec/dic.user";
 	
 	// "/", "&", "·" 을 제거하기 위한 함수
 	//앞이나 뒤에 붙어있을 경우 해당 한 글자만을 제거하는 함수
