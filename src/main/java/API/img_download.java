@@ -61,7 +61,7 @@ public class img_download {
 			// 이미지 주소 반환
 			System.setProperty("webdriver.chrome.driver",id.driverFilePath);
 			ChromeOptions options = new ChromeOptions();
-			options.addArguments("--headless","--disable-gpu", "--window-size=1920,1200","--ignore-certificate-errors", "--silent"); // "--headless", 
+			options.addArguments("--headless","--no-sandbox","--disable-gpu", "--window-size=1920,1200","--ignore-certificate-errors", "--silent"); // "--headless", 
 			
 			WebDriver driver = new ChromeDriver(options);
 		    driver.get(id.query_url);
