@@ -934,9 +934,10 @@ public class DB {
 	
 	// 긍부정 키워드를 알기위해 해당 사용자의 프리미엄 기사 데이터를 가져오는 함수
 	public JSONArray article_content_data_return(String user_seq, String start_date, String end_date) {
-		String sm3ID = this.getSM3ID(user_seq);
-		System.out.println("sm3ID : "+sm3ID);
-		String premiumID = this.premium_id_return(sm3ID);
+//		String sm3ID = this.getSM3ID(user_seq);
+//		System.out.println("sm3ID : "+sm3ID);
+//		String premiumID = this.premium_id_return(sm3ID);
+		String premiumID = this.getSM3ID(user_seq);
 		
 		System.out.println("premiumID : "+premiumID);
 		JSONArray result = new JSONArray();
